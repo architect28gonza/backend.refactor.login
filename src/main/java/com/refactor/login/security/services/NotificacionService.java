@@ -1,7 +1,4 @@
 package com.refactor.login.security.services;
-
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.sns.AmazonSNS;
@@ -14,6 +11,9 @@ import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
 import software.amazon.awssdk.services.sns.model.SnsException;
 import software.amazon.awssdk.services.sns.model.SubscribeRequest;
 import software.amazon.awssdk.services.sns.model.SubscribeResponse;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
