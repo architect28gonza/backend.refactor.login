@@ -1,0 +1,28 @@
+
+# POST http://localhost:8080/api/v1/registrar
+# Content-Type: application/json
+
+# {
+#     "usuario": "usustest1",
+#     "contrasena": "123",
+#     "telefono" : "+57-3148487338",
+#     "correo": "unigonzalez078@gmail.com"
+# }
+
+# POST http://localhost:8080/api/v1/login
+# Content-Type: application/json
+# Authorization: Bearer 
+# {
+#     "usuario": "",
+#     "contrasena": ""
+# }
+
+# POST http://localhost:8080/api/v1/contrasena
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3VzdGVzdDEiLCJpYXQiOjE2OTg2MDk2NTYsImV4cCI6MTY5ODY5NjA1Nn0.fCatjTbrOQtWUprvOdJ8pNKPmYqCqQSHCqtUxwW858Y
+
+# {
+#     "usuario": "usustest1",
+#     "emailOrPhone": "+573148487338",
+#     "isCorreo": true
+# }
