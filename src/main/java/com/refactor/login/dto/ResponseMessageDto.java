@@ -1,6 +1,6 @@
 package com.refactor.login.dto;
 
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 import lombok.Setter;

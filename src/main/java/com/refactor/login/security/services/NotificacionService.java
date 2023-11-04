@@ -6,6 +6,7 @@ import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
 import com.amazonaws.services.sns.model.PublishResult;
+import com.refactor.login.util.GenerarNumRandom;
 
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.CreateTopicRequest;
@@ -52,18 +53,20 @@ public class NotificacionService {
         return setProcesoSubcripcion("sms", numeroTelefono, arn);
     }
 
-    public void setEnviarSMS(String telefono) {
+    public String setEnviarSMS(String telefono) {
         try {
             Map<String, MessageAttributeValue> smsAtributos = new HashMap<>();
             smsAtributos.put("AWS.SNS.SMS.SenderID", this.getMessageAttributeValue(NOMBRE_TOPICO));
             smsAtributos.put("AWS.SNS.SMS.SMSType", this.getMessageAttributeValue("Transactional"));
 
-            final String mensaje = "Envio de servicio de sns - AxcelSoftware";
+            final String mensaje = "Su codigo para recuperar la contraseña es : "
+                    .concat(String.valueOf(GenerarNumRandom.getNumeroRandom()));
             PublishResult result = amazonSNS.publish(this.getPublishRequestSMS(mensaje, telefono, smsAtributos));
-            log.info("El id recibido es : " + result.getMessageId());
+            return result.getMessageId();
         } catch (SnsException e) {
             log.error("Error, No se pudo realizar el completado de envio : ".concat(e.getMessage()), e);
         }
+        return "";
     }
 
     private MessageAttributeValue getMessageAttributeValue(String valor) {

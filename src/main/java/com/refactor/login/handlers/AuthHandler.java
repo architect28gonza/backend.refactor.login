@@ -43,6 +43,6 @@ public class AuthHandler {
         return request.bodyToMono(RequestContrasenaDto.class)
                 .doOnNext(objectValidation::validate).flatMap(contrasena -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON).body(
-                                this.usuarioService.setCambiarContrasena(contrasena), ResponseMessageDto.class));
+                                this.usuarioService.setTipoRecuperacion(contrasena), ResponseMessageDto.class));
     }
 }

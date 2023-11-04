@@ -5,6 +5,7 @@ import static com.refactor.login.enums.Roles.USUARIO;
 
 import java.util.HashMap;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -93,15 +94,28 @@ public class UsuarioService {
             });
    }
 
-   public Mono<ResponseMessageDto> setCambiarContrasena(RequestContrasenaDto cambiarContrasena) {
+   public Mono<ResponseMessageDto> setTipoRecuperacion(RequestContrasenaDto cambiarContrasena) {
       return this.isExisteUsuario(cambiarContrasena.getUsuario()).flatMap(
             isUsuarioExiste -> {
                if (!isUsuarioExiste) {
                   return Mono.error(new ExceptionMain(BAD_REQUEST,
                         "La accion no se puede completar, El nombre de usuario no se encuentra."));
                } else {
-                  this.notificacionService.setEnviarSMS(cambiarContrasena.getEmailOrPhone());
+                  final boolean isCorreo = cambiarContrasena.isCorreo();
+                  final String tipoEnvio = (isCorreo ? "correo" : "teléfono");
+                  String resultadoEnvio = (!isCorreo)
+                        ? this.notificacionService.setEnviarSMS(cambiarContrasena.getEmailOrPhone())
+                        : "";
                   ResponseMessageDto responseMessageDto = new ResponseMessageDto();
+                  responseMessageDto.setMessage((!resultadoEnvio.equals(""))
+                        ? "Favor ingresar el código que le fue enviado a su "
+                              + tipoEnvio + " al momento de registrar su cuenta"
+                        : "No fue posible enviar el código, Por favor intente mas tarde.");
+
+                  responseMessageDto.setStatus((!resultadoEnvio.equals(""))
+                        ? HttpStatus.OK
+                        : HttpStatus.INTERNAL_SERVER_ERROR);
+
                   return Mono.just(responseMessageDto);
                }
             });
