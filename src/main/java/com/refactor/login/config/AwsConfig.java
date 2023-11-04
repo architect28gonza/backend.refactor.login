@@ -37,7 +37,7 @@ public class AwsConfig {
     }
 
     @Bean
-    private SnsClient getSnsClientCreate() {
+    public SnsClient getSnsClientCreate() {
         return SnsClient.builder()
                 .region(Region.US_EAST_1)
                 .credentialsProvider(StaticCredentialsProvider.create(

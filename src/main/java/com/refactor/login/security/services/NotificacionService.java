@@ -1,4 +1,5 @@
 package com.refactor.login.security.services;
+
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.sns.AmazonSNS;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,19 +26,30 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class NotificacionService {
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    private class TopicArn {
+        private String arn;
+        private boolean existeTopic;
+    }
+
     private static final String NOMBRE_TOPICO = "MyAxcelSNS"; /* Nombre del topico quemada, modo prueba */
 
     private final AmazonSNS amazonSNS;
     private final SnsClient snsCliente;
 
     public int addSubcripcion(String numeroTelefono) {
-        boolean procesoSubcripcion = true;
-        if (!isExisteTopico(NOMBRE_TOPICO)) {
-            final String topicoCreado = this.setCrearTopico(NOMBRE_TOPICO);
-            procesoSubcripcion = !topicoCreado.equals("");
-            return procesoSubcripcion ? this.setProcesoSubcripcion("sns", numeroTelefono, NOMBRE_TOPICO) : -1;
+        TopicArn objTopico = this.setBuscarTopico(NOMBRE_TOPICO);
+        final boolean isExisteTopico = objTopico.isExisteTopic();
+        final String arn = objTopico.getArn();
+        if (!isExisteTopico) {
+            final String arnResultado = this.setCrearTopico(NOMBRE_TOPICO);
+            return !arnResultado.equals("")
+                    ? setProcesoSubcripcion("sms", numeroTelefono, arnResultado)
+                    : -1;
         }
-        return -1;
+        return setProcesoSubcripcion("sms", numeroTelefono, arn);
     }
 
     public void setEnviarSMS(String telefono) {
@@ -74,9 +88,9 @@ public class NotificacionService {
         return "";
     }
 
-    private int setProcesoSubcripcion(String tipoProtocolo, String tipoEndpoint, String topico) {
+    private int setProcesoSubcripcion(String tipoProtocolo, String tipoEndpoint, String arn) {
         try {
-            SubscribeRequest request = this.getSubscribeRequest(tipoProtocolo, tipoEndpoint, topico);
+            SubscribeRequest request = this.getSubscribeRequest(tipoProtocolo, tipoEndpoint, arn);
             SubscribeResponse result = snsCliente.subscribe(request);
             return result.sdkHttpResponse().statusCode();
         } catch (SnsException e) {
@@ -85,17 +99,20 @@ public class NotificacionService {
         return -1;
     }
 
-    private boolean isExisteTopico(String nombreTopico) {
+    private TopicArn setBuscarTopico(String nombreTopico) {
         return amazonSNS.listTopics().getTopics().stream()
-                .anyMatch(topic -> topic.getTopicArn().contains(nombreTopico));
+                .filter(topic -> topic.getTopicArn().contains(nombreTopico))
+                .map(topic -> new TopicArn(topic.getTopicArn(), true))
+                .findFirst()
+                .orElse(new TopicArn(null, false));
     }
 
-    private SubscribeRequest getSubscribeRequest(String tipoProtocolo, String tipoEndpoint, String topico) {
+    private SubscribeRequest getSubscribeRequest(String tipoProtocolo, String tipoEndpoint, String arn) {
         return SubscribeRequest.builder()
                 .protocol(tipoProtocolo)
                 .endpoint(tipoEndpoint)
                 .returnSubscriptionArn(true)
-                .topicArn(topico)
+                .topicArn(arn)
                 .build();
     }
 }

@@ -45,7 +45,7 @@ public class UsuarioService {
                      TokenCreacionDto tokenCreacionDto = new TokenCreacionDto();
                      tokenCreacionDto.setUsuario(savedUser.getUsername());
                      tokenCreacionDto.setToken(token);
-                     // this.notificacionService.addSubcripcionUsuario(usuario.getCorreo());
+                     this.notificacionService.addSubcripcion(usuario.getTelefono());
                      return tokenCreacionDto;
                   });
                }
@@ -100,7 +100,6 @@ public class UsuarioService {
                   return Mono.error(new ExceptionMain(BAD_REQUEST,
                         "La accion no se puede completar, El nombre de usuario no se encuentra."));
                } else {
-                  // final boolean isCorreo = cambiarContrasena.isCorreo();
                   this.notificacionService.setEnviarSMS(cambiarContrasena.getEmailOrPhone());
                   ResponseMessageDto responseMessageDto = new ResponseMessageDto();
                   return Mono.just(responseMessageDto);
