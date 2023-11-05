@@ -33,6 +33,8 @@ public class UsuarioService {
 
    private final NotificacionService notificacionService;
 
+   private final EnvioCorreoService envioCorreoService;
+
    public Mono<TokenCreacionDto> setGuardarUsuario(RequestUsuarioDto usuario) {
       return this.isExisteUsuario(usuario.getUsuario()).flatMap(
             isUsuarioExiste -> {
@@ -101,11 +103,12 @@ public class UsuarioService {
                   return Mono.error(new ExceptionMain(BAD_REQUEST,
                         "La accion no se puede completar, El nombre de usuario no se encuentra."));
                } else {
-                  final boolean isCorreo = cambiarContrasena.isCorreo();
-                  final String tipoEnvio = (isCorreo ? "correo" : "teléfono");
-                  String resultadoEnvio = (!isCorreo)
-                        ? this.notificacionService.setEnviarSMS(cambiarContrasena.getEmailOrPhone())
-                        : "";
+                  boolean isCorreo = cambiarContrasena.isOperacionEmail();
+                  String tipoEnvio = (isCorreo ? "correo" : "teléfono");
+                  String resultadoEnvio = (isCorreo)
+                        ? this.envioCorreoService.setEnviarCorreo(cambiarContrasena.getEmailOrPhone()) 
+                        : this.notificacionService.setEnviarSMS(cambiarContrasena.getEmailOrPhone());
+                        
                   ResponseMessageDto responseMessageDto = new ResponseMessageDto();
                   responseMessageDto.setMessage((!resultadoEnvio.equals(""))
                         ? "Favor ingresar el código que le fue enviado a su "

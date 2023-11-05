@@ -28,6 +28,8 @@ Content-Type: application/json
 
 {
     "usuario": "usvvvvvvvv399",
-    "emailOrPhone": "+573148487338",
-    "isCorreo": true
+    "emailOrPhone": "unigonzalez078@gmail.com",
+    "operacionEmail": true
 }
+
+# "emailOrPhone": "axcelsoftrepositorio@gmail.com"

@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -44,4 +46,13 @@ public class AwsConfig {
                         AwsBasicCredentials.create(awsAccesokey, awsSecrectKey)))
                 .build();
     }
+
+    @Bean
+    public AmazonSimpleEmailService amazonSimpleEmailService() {
+        return AmazonSimpleEmailServiceClientBuilder.standard()
+                .withRegion(Region.US_EAST_1.toString())
+                .withCredentials(new AWSStaticCredentialsProvider(getBasicAWSCredentials()))
+                .build();
+    }
+
 }

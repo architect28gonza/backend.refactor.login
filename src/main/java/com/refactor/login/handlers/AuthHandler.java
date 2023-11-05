@@ -39,7 +39,7 @@ public class AuthHandler {
     }
 
 
-    public Mono<ServerResponse> setCambiarContrasena(ServerRequest request) {
+    public Mono<ServerResponse> setTipoRecuperacionContrasena(ServerRequest request) {
         return request.bodyToMono(RequestContrasenaDto.class)
                 .doOnNext(objectValidation::validate).flatMap(contrasena -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON).body(

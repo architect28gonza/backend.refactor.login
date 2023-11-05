@@ -8,5 +8,5 @@ import lombok.Setter;
 public class RequestContrasenaDto {
     private String usuario;
     private String emailOrPhone;
-    private boolean isCorreo;
+    private boolean operacionEmail;
 }

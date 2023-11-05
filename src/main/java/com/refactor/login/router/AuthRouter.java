@@ -18,7 +18,7 @@ public class AuthRouter {
                 .route()
                 .POST(ENDPOINT.toString().concat("/registrar"), handler::setGuardarUsuario)
                 .POST(ENDPOINT.toString().concat("/login"), handler::setIniciarSesionUsuario)
-                .POST(ENDPOINT.toString().concat("/recuperar"), handler::setCambiarContrasena)
+                .POST(ENDPOINT.toString().concat("/recuperar"), handler::setTipoRecuperacionContrasena)
                 .build();
     }
 }
