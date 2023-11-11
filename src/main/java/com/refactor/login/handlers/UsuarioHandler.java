@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
-public class AuthHandler {
+public class UsuarioHandler {
 
     private final UsuarioService usuarioService;
 

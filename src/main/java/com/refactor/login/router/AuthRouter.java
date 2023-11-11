@@ -6,14 +6,14 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import com.refactor.login.handlers.AuthHandler;
+import com.refactor.login.handlers.UsuarioHandler;
 
 @Configuration
 public class AuthRouter {
     private static final StringBuilder ENDPOINT = new StringBuilder("/api/v1");
 
     @Bean
-    RouterFunction<ServerResponse> routerPersona(AuthHandler handler) {
+    RouterFunction<ServerResponse> routerPersona(UsuarioHandler handler) {
         return RouterFunctions
                 .route()
                 .POST(ENDPOINT.toString().concat("/registrar"), handler::setGuardarUsuario)

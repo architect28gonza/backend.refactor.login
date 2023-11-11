@@ -1,5 +1,7 @@
 package com.refactor.login.dto;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,4 +15,5 @@ public class TokenCreacionDto {
     
     private String usuario;
     private String token;
+    private HttpStatus status;
 }

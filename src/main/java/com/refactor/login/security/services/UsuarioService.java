@@ -86,6 +86,7 @@ public class UsuarioService {
                               TokenCreacionDto tokenCreacionDto = new TokenCreacionDto();
                               tokenCreacionDto.setUsuario(usu.getUsername());
                               tokenCreacionDto.setToken(token);
+                              tokenCreacionDto.setStatus(HttpStatus.OK);
                               return Mono.just(tokenCreacionDto);
                            } else {
                               return Mono.error(

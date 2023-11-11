@@ -14,6 +14,7 @@ import com.amazonaws.services.sns.AmazonSNSClient;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 import software.amazon.awssdk.services.sns.SnsClient;
 
 @Configuration
@@ -54,5 +55,16 @@ public class AwsConfig {
                 .withCredentials(new AWSStaticCredentialsProvider(getBasicAWSCredentials()))
                 .build();
     }
+
+
+    @Bean
+    public CognitoIdentityProviderClient getCognitoConfiguracion () {
+        return CognitoIdentityProviderClient.builder()
+            .region(Region.US_EAST_1)
+            .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create(awsAccesokey, awsSecrectKey)))
+            .build();
+    }
+
 
 }
