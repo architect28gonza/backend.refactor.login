@@ -9,16 +9,15 @@
 #     "correo": "unigonzalez078@gmail.com"
 # }
 
+# "telefono" : "+573146743903",
 
-    # "telefono" : "+573146743903",
+# POST http://localhost:8080/api/v1/login
+# Content-Type: application/json
 
-POST http://localhost:8080/api/v1/login
-Content-Type: application/json
-
-{
-    "usuario": "angel",
-    "contrasena": "123"
-}
+# {
+#     "usuario": "angel",
+#     "contrasena": "123"
+# }
 
 # Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1czF1c3QyMmVmc3RlcjIzMzEzMjM5OSIsImlhdCI6MTY5OTExNTQ0MSwiZXhwIjoxNjk5MjAxODQxfQ.D86f8-ciMcqm75ybG5imJ2m-G4mYlHQAmvpk-FxB0zw
 
@@ -27,9 +26,15 @@ Content-Type: application/json
 # Content-Type: application/json
 
 # {
-#     "usuario": "usvvvvvvvv399",
-#     "emailOrPhone": "unigonzalez078@gmail.com",
-#     "operacionEmail": true
+#     "usuario": "angel",
+#     "emailOrPhone": "+573148487338",
+#     "operacionEmail": false
 # }
 
-# "emailOrPhone": "axcelsoftrepositorio@gmail.com"
+POST http://localhost:8080/api/v1/codigo
+Content-Type: application/json
+
+{
+    "codigo": "3139"
+}
+

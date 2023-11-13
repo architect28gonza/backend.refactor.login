@@ -1,11 +1,13 @@
 package com.refactor.login.security.services;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.services.sns.model.PublishRequest;
-import com.amazonaws.services.sns.model.PublishResult;
+import com.refactor.login.dto.ResponseMessageDto;
+import com.refactor.login.security.repository.RecuperacionRepository;
 import com.refactor.login.util.GenerarNumRandom;
 
 import software.amazon.awssdk.services.sns.SnsClient;
@@ -21,11 +23,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class NotificacionService {
+
+    private final RecuperacionRepository recuperacionRepository;
 
     @Data
     @NoArgsConstructor
@@ -53,20 +58,26 @@ public class NotificacionService {
         return setProcesoSubcripcion("sms", numeroTelefono, arn);
     }
 
-    public String setEnviarSMS(String telefono) {
+    public Mono<ResponseMessageDto> setEnviarSMS(String telefono) {
         try {
-            Map<String, MessageAttributeValue> smsAtributos = new HashMap<>();
-            smsAtributos.put("AWS.SNS.SMS.SenderID", this.getMessageAttributeValue(NOMBRE_TOPICO));
-            smsAtributos.put("AWS.SNS.SMS.SMSType", this.getMessageAttributeValue("Transactional"));
+            int codigo = GenerarNumRandom.getNumeroRandom();
+            return this.recuperacionRepository.save(GenerarNumRandom.setInsertCodigo(codigo)).map(
+                    cod -> {
+                        Map<String, MessageAttributeValue> smsAtributos = new HashMap<>();
+                        smsAtributos.put("AWS.SNS.SMS.SenderID", this.getMessageAttributeValue(NOMBRE_TOPICO));
+                        smsAtributos.put("AWS.SNS.SMS.SMSType", this.getMessageAttributeValue("Transactional"));
 
-            final String mensaje = "Su codigo para recuperar la contraseña es : "
-                    .concat(String.valueOf(GenerarNumRandom.getNumeroRandom()));
-            PublishResult result = amazonSNS.publish(this.getPublishRequestSMS(mensaje, telefono, smsAtributos));
-            return result.getMessageId();
+                        ResponseMessageDto response = new ResponseMessageDto();
+                        final String mensaje = "Su codigo para recuperar la contraseña es : ".concat(String.valueOf(codigo));
+                        amazonSNS.publish(this.getPublishRequestSMS(mensaje, telefono, smsAtributos));
+    
+                        response.setStatus(HttpStatus.OK);
+                        return response;
+                    });
         } catch (SnsException e) {
             log.error("Error, No se pudo realizar el completado de envio : ".concat(e.getMessage()), e);
         }
-        return "";
+        return Mono.just(new ResponseMessageDto());
     }
 
     private MessageAttributeValue getMessageAttributeValue(String valor) {

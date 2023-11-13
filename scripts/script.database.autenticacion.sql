@@ -11,3 +11,11 @@ create table tbl_usuario(
     usu_estado boolean default true,
     usu_registro timestamp default now()
 );
+
+create table tbl_recuperacion(
+    rec_id serial primary key,
+    rec_codigo int unique not null,
+    rec_caducacion varchar(15) not null,
+    rec_estado boolean default true,
+    rec_registro timestamp default now()
+);

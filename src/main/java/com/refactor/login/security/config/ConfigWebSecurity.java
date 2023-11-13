@@ -19,7 +19,8 @@ public class ConfigWebSecurity {
 	private final String[] endpoints = {
 			ENDPOINT.concat("/registrar"),
 			ENDPOINT.concat("/login"),
-			ENDPOINT.concat("/recuperar")
+			ENDPOINT.concat("/recuperar"),
+			ENDPOINT.concat("/codigo"),		
 	};
 
 	@Bean

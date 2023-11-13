@@ -106,22 +106,33 @@ public class UsuarioService {
                } else {
                   boolean isCorreo = cambiarContrasena.isOperacionEmail();
                   String tipoEnvio = (isCorreo ? "correo" : "teléfono");
-                  String resultadoEnvio = (isCorreo)
-                        ? this.envioCorreoService.setEnviarCorreo(cambiarContrasena.getEmailOrPhone()) 
-                        : this.notificacionService.setEnviarSMS(cambiarContrasena.getEmailOrPhone());
-                        
-                  ResponseMessageDto responseMessageDto = new ResponseMessageDto();
-                  responseMessageDto.setMessage((!resultadoEnvio.equals(""))
-                        ? "Favor ingresar el código que le fue enviado a su "
-                              + tipoEnvio + " al momento de registrar su cuenta"
-                        : "No fue posible enviar el código, Por favor intente mas tarde.");
 
-                  responseMessageDto.setStatus((!resultadoEnvio.equals(""))
-                        ? HttpStatus.OK
-                        : HttpStatus.INTERNAL_SERVER_ERROR);
+                  return this.getTipoEnvio(cambiarContrasena).flatMap(
+                        cod -> {
+                           
+                           ResponseMessageDto responseMessageDto = new ResponseMessageDto();
+                           responseMessageDto.setMessage((cod.getStatus() == HttpStatus.OK)
+                                 ? "Favor ingresar el código que le fue enviado a su "
+                                       + tipoEnvio + " al momento de registrar su cuenta"
+                                 : "No fue posible enviar el código, Por favor intente mas tarde.");
 
-                  return Mono.just(responseMessageDto);
+                           responseMessageDto.setStatus((cod.getStatus() == HttpStatus.OK)
+                                 ? HttpStatus.OK
+                                 : HttpStatus.INTERNAL_SERVER_ERROR);
+
+                           return Mono.just(responseMessageDto);
+                        });
+                  // String resultadoEnvio = (isCorreo)
+                  // ?
+                  // this.envioCorreoService.setEnviarCorreo(cambiarContrasena.getEmailOrPhone())
+                  // : this.notificacionService.setEnviarSMS(cambiarContrasena.getEmailOrPhone());
                }
             });
+   }
+
+   private Mono<ResponseMessageDto> getTipoEnvio(RequestContrasenaDto requestEnvio) {
+      return (!requestEnvio.isOperacionEmail())
+            ? this.notificacionService.setEnviarSMS(requestEnvio.getEmailOrPhone())
+            : Mono.just(new ResponseMessageDto());
    }
 }

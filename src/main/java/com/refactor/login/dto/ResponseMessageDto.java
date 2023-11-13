@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 public class ResponseMessageDto {
     private String message;
-    private HttpStatus status;
+    private HttpStatus status = HttpStatus.NOT_ACCEPTABLE;
 }

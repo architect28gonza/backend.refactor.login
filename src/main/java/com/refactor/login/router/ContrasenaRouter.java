@@ -6,19 +6,19 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import com.refactor.login.handlers.UsuarioHandler;
+import com.refactor.login.handlers.ContrasenaHandler;
 
 @Configuration
-public class AuthRouter {
+public class ContrasenaRouter {
+    
     private static final StringBuilder ENDPOINT = new StringBuilder("/api/v1");
 
     @Bean
-    RouterFunction<ServerResponse> routerPersona(UsuarioHandler handler) {
+    RouterFunction<ServerResponse> routerContrasena(ContrasenaHandler handler) {
         return RouterFunctions
                 .route()
-                .POST(ENDPOINT.toString().concat("/registrar"), handler::setGuardarUsuario)
-                .POST(ENDPOINT.toString().concat("/login"), handler::setIniciarSesionUsuario)
-                .POST(ENDPOINT.toString().concat("/recuperar"), handler::setTipoRecuperacionContrasena)
+                .POST(ENDPOINT.toString().concat("/codigo"), handler::setVerificarCodigoContrasena)
                 .build();
     }
+
 }
