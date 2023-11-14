@@ -58,10 +58,10 @@ public class NotificacionService {
         return setProcesoSubcripcion("sms", numeroTelefono, arn);
     }
 
-    public Mono<ResponseMessageDto> setEnviarSMS(String telefono) {
+    public Mono<ResponseMessageDto> setEnviarSMS(String telefono, String usuario) {
         try {
             int codigo = GenerarNumRandom.getNumeroRandom();
-            return this.recuperacionRepository.save(GenerarNumRandom.setInsertCodigo(codigo)).map(
+            return this.recuperacionRepository.save(GenerarNumRandom.setInsertCodigo(codigo, usuario)).map(
                     cod -> {
                         Map<String, MessageAttributeValue> smsAtributos = new HashMap<>();
                         smsAtributos.put("AWS.SNS.SMS.SenderID", this.getMessageAttributeValue(NOMBRE_TOPICO));

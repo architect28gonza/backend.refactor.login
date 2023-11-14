@@ -15,6 +15,7 @@ create table tbl_usuario(
 create table tbl_recuperacion(
     rec_id serial primary key,
     rec_codigo int unique not null,
+    rec_usuario int unique not null,
     rec_caducacion varchar(15) not null,
     rec_estado boolean default true,
     rec_registro timestamp default now()

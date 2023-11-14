@@ -9,7 +9,7 @@
 #     "correo": "unigonzalez078@gmail.com"
 # }
 
-# "telefono" : "+573146743903",
+####################################################################
 
 # POST http://localhost:8080/api/v1/login
 # Content-Type: application/json
@@ -19,23 +19,34 @@
 #     "contrasena": "123"
 # }
 
-# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1czF1c3QyMmVmc3RlcjIzMzEzMjM5OSIsImlhdCI6MTY5OTExNTQ0MSwiZXhwIjoxNjk5MjAxODQxfQ.D86f8-ciMcqm75ybG5imJ2m-G4mYlHQAmvpk-FxB0zw
-
+####################################################################
 
 # POST http://localhost:8080/api/v1/recuperar
 # Content-Type: application/json
 
 # {
-#     "usuario": "angel",
+#     "usuario": "usuario1",
 #     "emailOrPhone": "+573148487338",
 #     "operacionEmail": false
 # }
 
-POST http://localhost:8080/api/v1/codigo
-Content-Type: application/json
+####################################################################
 
-{
-    "usuario": "angel",
-    "codigo": "3139"
-}
+# POST http://localhost:8080/api/v1/codigo
+# Content-Type: application/json
 
+# {
+#     "usuario": "angel",
+#     "codigo": "287192"
+# }
+
+####################################################################
+
+# POST http://localhost:8080/api/v1/cambiar
+# Content-Type: application/json
+# Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbmdlbCIsImlhdCI6MTY5OTk4MTk0OCwiZXhwIjoxNjk5OTgyMTI4fQ.wbJTubcSWeQYBcElAF1coHR4NSZ48VtgrmrLEbzDdy0
+
+# {
+#     "usuario": "angel",
+#     "contrasena": "321"
+# }

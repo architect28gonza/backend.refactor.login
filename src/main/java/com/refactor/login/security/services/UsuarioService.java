@@ -92,7 +92,7 @@ public class UsuarioService {
                               return Mono.just(tokenCreacionDto);
                            } else {
                               return Mono.error(
-                                    new ExceptionMain(BAD_REQUEST, "No se puede autenticar, Contraseña incorrecta."));
+                                    new ExceptionMain(BAD_REQUEST, "No se puede autenticar, Credenciales incorrectas."));
                            }
                         });
                }
@@ -133,7 +133,7 @@ public class UsuarioService {
 
    private Mono<ResponseMessageDto> getTipoEnvio(RequestContrasenaDto requestEnvio) {
       return (!requestEnvio.isOperacionEmail())
-            ? this.notificacionService.setEnviarSMS(requestEnvio.getEmailOrPhone())
+            ? this.notificacionService.setEnviarSMS(requestEnvio.getEmailOrPhone(), requestEnvio.getUsuario())
             : Mono.just(new ResponseMessageDto());
    }
 }

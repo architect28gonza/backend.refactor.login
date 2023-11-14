@@ -20,6 +20,7 @@ public class RecuperacionEntity {
     @Id
     private int rec_id;
     private int rec_codigo;
+    private String rec_usuario;
     private String rec_caducacion;
     
     @Builder.Default
