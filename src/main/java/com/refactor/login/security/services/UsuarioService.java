@@ -13,7 +13,7 @@ import com.refactor.login.dto.RequestContrasenaDto;
 import com.refactor.login.dto.RequestUsuarioDto;
 import com.refactor.login.dto.ResponseMessageDto;
 import com.refactor.login.dto.ResponseTokenCreacionDto;
-import com.refactor.login.dto.UsuarioDto;
+import com.refactor.login.dto.RequestInitUsuarioDto;
 import com.refactor.login.exception.ExceptionMain;
 import com.refactor.login.security.entity.UsuarioEntity;
 import com.refactor.login.security.repository.UsuarioRepository;
@@ -70,7 +70,7 @@ public class UsuarioService {
       return this.usuarioRepository.findByUsuarioAndEstado(usuario, true).hasElement();
    }
 
-   public Mono<ResponseTokenCreacionDto> setIniciarSesion(UsuarioDto usuario) {
+   public Mono<ResponseTokenCreacionDto> setIniciarSesion(RequestInitUsuarioDto usuario) {
       return this.isExisteUsuario(usuario.getUsuario()).flatMap(
             isUsuarioExiste -> {
                if (!isUsuarioExiste) {

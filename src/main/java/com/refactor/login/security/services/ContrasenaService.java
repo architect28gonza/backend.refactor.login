@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.refactor.login.dto.ResponseMessageDto;
 import com.refactor.login.dto.ResponseTokenCreacionDto;
-import com.refactor.login.dto.UsuarioDto;
+import com.refactor.login.dto.RequestInitUsuarioDto;
 import com.refactor.login.security.repository.RecuperacionRepository;
 import com.refactor.login.security.repository.UsuarioRepository;
 
@@ -57,7 +57,7 @@ public class ContrasenaService {
     }
 
     @Transactional
-    public Mono<ResponseMessageDto> setCambiarContrasena(UsuarioDto usuario) {
+    public Mono<ResponseMessageDto> setCambiarContrasena(RequestInitUsuarioDto usuario) {
         return this.usuarioRepository.findByUsuarioAndEstado(usuario.getUsuario(), true)
                 .flatMap(
                         user -> {

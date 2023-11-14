@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import com.refactor.login.dto.RequestCodigoDto;
 import com.refactor.login.dto.ResponseMessageDto;
-import com.refactor.login.dto.UsuarioDto;
+import com.refactor.login.dto.RequestInitUsuarioDto;
 import com.refactor.login.security.services.ContrasenaService;
 import com.refactor.login.validation.ObjectValidation;
 
@@ -33,7 +33,7 @@ public class ContrasenaHandler {
     }
 
     public Mono<ServerResponse> setCambiarContrasena(ServerRequest request) {
-        return request.bodyToMono(UsuarioDto.class)
+        return request.bodyToMono(RequestInitUsuarioDto.class)
                 .doOnNext(objectValidation::validate).flatMap(usuario -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON).body(
                                 this.contrasenaService.setCambiarContrasena(usuario),

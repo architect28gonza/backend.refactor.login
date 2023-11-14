@@ -8,7 +8,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import com.refactor.login.dto.RequestContrasenaDto;
 import com.refactor.login.dto.RequestUsuarioDto;
 import com.refactor.login.dto.ResponseMessageDto;
-import com.refactor.login.dto.UsuarioDto;
+import com.refactor.login.dto.RequestInitUsuarioDto;
 import com.refactor.login.security.entity.UsuarioEntity;
 import com.refactor.login.security.services.UsuarioService;
 import com.refactor.login.validation.ObjectValidation;
@@ -32,7 +32,7 @@ public class UsuarioHandler {
     }
 
     public Mono<ServerResponse> setIniciarSesionUsuario(ServerRequest request) {
-        return request.bodyToMono(UsuarioDto.class)
+        return request.bodyToMono(RequestInitUsuarioDto.class)
                 .doOnNext(objectValidation::validate).flatMap(usuario -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON).body(
                                 this.usuarioService.setIniciarSesion(usuario), UsuarioEntity.class));
