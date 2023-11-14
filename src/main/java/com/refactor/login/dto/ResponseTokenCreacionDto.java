@@ -11,8 +11,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenCreacionDto {
+public class ResponseTokenCreacionDto {
     
+    private String message;
     private String usuario;
     private String token;
     private HttpStatus status;

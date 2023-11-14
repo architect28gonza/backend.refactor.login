@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.refactor.login.dto.RequestContrasenaDto;
 import com.refactor.login.dto.RequestUsuarioDto;
 import com.refactor.login.dto.ResponseMessageDto;
-import com.refactor.login.dto.TokenCreacionDto;
+import com.refactor.login.dto.ResponseTokenCreacionDto;
 import com.refactor.login.dto.UsuarioDto;
 import com.refactor.login.exception.ExceptionMain;
 import com.refactor.login.security.entity.UsuarioEntity;
@@ -33,9 +33,9 @@ public class UsuarioService {
 
    private final NotificacionService notificacionService;
 
-   private final EnvioCorreoService envioCorreoService;
+   private static final int TIEMPO_TOKEN = 86400000;
 
-   public Mono<TokenCreacionDto> setGuardarUsuario(RequestUsuarioDto usuario) {
+   public Mono<ResponseTokenCreacionDto> setGuardarUsuario(RequestUsuarioDto usuario) {
       return this.isExisteUsuario(usuario.getUsuario()).flatMap(
             isUsuarioExiste -> {
                if (isUsuarioExiste) {
@@ -44,8 +44,9 @@ public class UsuarioService {
                } else {
                   return this.usuarioRepository.save(this.getBuilderUsuario(usuario)).map(savedUser -> {
                      var token = this.jsonWebTokenService.setGenerarToken(new HashMap<>(),
-                           savedUser.getUsername());
-                     TokenCreacionDto tokenCreacionDto = new TokenCreacionDto();
+                           savedUser.getUsername(), TIEMPO_TOKEN);
+                     ResponseTokenCreacionDto tokenCreacionDto = new ResponseTokenCreacionDto();
+                     tokenCreacionDto.setMessage("El usuario ha sido creado con exito");
                      tokenCreacionDto.setUsuario(savedUser.getUsername());
                      tokenCreacionDto.setToken(token);
                      this.notificacionService.addSubcripcion(usuario.getTelefono());
@@ -69,7 +70,7 @@ public class UsuarioService {
       return this.usuarioRepository.findByUsuarioAndEstado(usuario, true).hasElement();
    }
 
-   public Mono<TokenCreacionDto> setIniciarSesion(UsuarioDto usuario) {
+   public Mono<ResponseTokenCreacionDto> setIniciarSesion(UsuarioDto usuario) {
       return this.isExisteUsuario(usuario.getUsuario()).flatMap(
             isUsuarioExiste -> {
                if (!isUsuarioExiste) {
@@ -82,8 +83,9 @@ public class UsuarioService {
                         usu -> {
                            if (this.codificarContrasena.matches(usuario.getContrasena(), usu.getPassword())) {
                               var token = this.jsonWebTokenService.setGenerarToken(new HashMap<>(),
-                                    usu.getUsername());
-                              TokenCreacionDto tokenCreacionDto = new TokenCreacionDto();
+                                    usu.getUsername(), TIEMPO_TOKEN);
+                              ResponseTokenCreacionDto tokenCreacionDto = new ResponseTokenCreacionDto();
+                              tokenCreacionDto.setMessage("El inicio se ha completado con exito");
                               tokenCreacionDto.setUsuario(usu.getUsername());
                               tokenCreacionDto.setToken(token);
                               tokenCreacionDto.setStatus(HttpStatus.OK);
@@ -109,7 +111,6 @@ public class UsuarioService {
 
                   return this.getTipoEnvio(cambiarContrasena).flatMap(
                         cod -> {
-                           
                            ResponseMessageDto responseMessageDto = new ResponseMessageDto();
                            responseMessageDto.setMessage((cod.getStatus() == HttpStatus.OK)
                                  ? "Favor ingresar el código que le fue enviado a su "

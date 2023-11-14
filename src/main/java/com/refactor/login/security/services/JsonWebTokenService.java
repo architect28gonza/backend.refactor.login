@@ -21,8 +21,6 @@ public class JsonWebTokenService {
     @Value("${util.application.jwt}")
     private String secrectToken;
 
-    private static final int TIEMPO_TOKEN = 86400000;
-
     public String extraerNombreUsuarioJwt(String token) {
         return this.extraerClaims(token, Claims::getSubject);
     }
@@ -45,13 +43,13 @@ public class JsonWebTokenService {
         return claimsResolver.apply(claims);
     }
 
-    public String setGenerarToken(Map<String, Object> claims, String nombreUsuario) {
+    public String setGenerarToken(Map<String, Object> claims, String nombreUsuario, int tiempoToken) {
         return Jwts
                 .builder()
                 .setClaims(claims)
                 .setSubject(nombreUsuario)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + TIEMPO_TOKEN))
+                .setExpiration(new Date(System.currentTimeMillis() + tiempoToken))
                 .signWith(this.getFirmaClave(), SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -18,6 +18,7 @@ public class ContrasenaRouter {
         return RouterFunctions
                 .route()
                 .POST(ENDPOINT.toString().concat("/codigo"), handler::setVerificarCodigoContrasena)
+                .POST(ENDPOINT.toString().concat("/cambiar"), handler::setCambiarContrasena)
                 .build();
     }
 

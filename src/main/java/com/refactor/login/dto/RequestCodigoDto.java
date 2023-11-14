@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 public class RequestCodigoDto {
     
+    private String usuario;
     private int codigo;
 }
