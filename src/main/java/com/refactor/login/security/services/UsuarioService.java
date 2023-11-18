@@ -48,6 +48,7 @@ public class UsuarioService {
                      ResponseTokenCreacionDto tokenCreacionDto = new ResponseTokenCreacionDto();
                      tokenCreacionDto.setMessage("El usuario ha sido creado con exito");
                      tokenCreacionDto.setUsuario(savedUser.getUsername());
+                     tokenCreacionDto.setStatus(HttpStatus.OK);
                      tokenCreacionDto.setToken(token);
                      this.notificacionService.addSubcripcion(usuario.getTelefono());
                      return tokenCreacionDto;

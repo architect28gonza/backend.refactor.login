@@ -39,5 +39,4 @@ public class ContrasenaHandler {
                                 this.contrasenaService.setCambiarContrasena(usuario),
                                 ResponseMessageDto.class));
     }
-
 }

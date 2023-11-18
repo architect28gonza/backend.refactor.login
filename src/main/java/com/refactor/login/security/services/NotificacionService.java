@@ -69,7 +69,7 @@ public class NotificacionService {
 
                         ResponseMessageDto response = new ResponseMessageDto();
                         final String mensaje = "Su codigo para recuperar la contraseña es : ".concat(String.valueOf(codigo));
-                        amazonSNS.publish(this.getPublishRequestSMS(mensaje, telefono, smsAtributos));
+                        // amazonSNS.publish(this.getPublishRequestSMS(mensaje, telefono, smsAtributos));
     
                         response.setStatus(HttpStatus.OK);
                         return response;
