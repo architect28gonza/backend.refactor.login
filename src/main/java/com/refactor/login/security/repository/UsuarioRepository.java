@@ -15,4 +15,7 @@ public interface UsuarioRepository extends ReactiveCrudRepository<UsuarioEntity,
 
     @Query("SELECT usu_usuario FROM ref_autenticacion.tbl_usuario WHERE usu_id = :id AND usu_estado = :estado")
     Mono<UsuarioInterface> findByIdAndEstado(int idUsuario, boolean estado);
+
+    @Query("SELECT usu_usuario FROM ref_autenticacion.tbl_usuario WHERE usu_usuario = :usuario AND usu_estado = :estado AND usu_telefono = :phoneOrEmail OR usu_email = :phoneOrEmail")
+    Mono<UsuarioInterface> findByIdAndEstadoAndPhoneOrEmail(String usuario, boolean estado, String phoneOrEmail);
 }

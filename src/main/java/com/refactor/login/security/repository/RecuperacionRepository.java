@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 public interface RecuperacionRepository extends ReactiveCrudRepository<RecuperacionEntity, Integer> {
 
-    @Query("SELECT * FROM ref_autenticacion.tbl_recuperacion WHERE rec_codigo = :codigo AND red_usuario = :usuario rec_estado = true")
+    @Query("SELECT * FROM ref_autenticacion.tbl_recuperacion WHERE rec_codigo = :codigo AND rec_usuario = :usuario AND rec_estado = true")
     Mono<RecuperacionEntity> findByCodigoAndUsuario(int codigo, String usuario);
 
 }

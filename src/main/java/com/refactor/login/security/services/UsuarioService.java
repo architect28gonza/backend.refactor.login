@@ -71,6 +71,10 @@ public class UsuarioService {
       return this.usuarioRepository.findByUsuarioAndEstado(usuario, true).hasElement();
    }
 
+   private Mono<Boolean> isExisteUsuario(String usuario, String phoneOrEmail) {
+      return this.usuarioRepository.findByIdAndEstadoAndPhoneOrEmail(usuario, true, phoneOrEmail).hasElement();
+   }
+
    public Mono<ResponseTokenCreacionDto> setIniciarSesion(RequestInitUsuarioDto usuario) {
       return this.isExisteUsuario(usuario.getUsuario()).flatMap(
             isUsuarioExiste -> {
@@ -93,7 +97,8 @@ public class UsuarioService {
                               return Mono.just(tokenCreacionDto);
                            } else {
                               return Mono.error(
-                                    new ExceptionMain(BAD_REQUEST, "No se puede autenticar, Credenciales incorrectas."));
+                                    new ExceptionMain(BAD_REQUEST,
+                                          "No se puede autenticar, Credenciales incorrectas."));
                            }
                         });
                }
@@ -101,11 +106,11 @@ public class UsuarioService {
    }
 
    public Mono<ResponseMessageDto> setTipoRecuperacion(RequestContrasenaDto cambiarContrasena) {
-      return this.isExisteUsuario(cambiarContrasena.getUsuario()).flatMap(
+      return this.isExisteUsuario(cambiarContrasena.getUsuario(), cambiarContrasena.getEmailOrPhone()).flatMap(
             isUsuarioExiste -> {
                if (!isUsuarioExiste) {
                   return Mono.error(new ExceptionMain(BAD_REQUEST,
-                        "La accion no se puede completar, El nombre de usuario no se encuentra."));
+                        "La accion no se puede completar, Los datos proporcionados no son correctos."));
                } else {
                   boolean isCorreo = cambiarContrasena.isOperacionEmail();
                   String tipoEnvio = (isCorreo ? "correo" : "teléfono");
